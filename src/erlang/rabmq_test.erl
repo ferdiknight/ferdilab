@@ -13,7 +13,7 @@ start() ->
     Queue = <<"kun_Q">>,
     {ok,Client} = connect(),
     Channel = Client#rabbit_client.channel,
-    spawn( fun() -> loop(Channel,Queue,0) end ),
+    spawn( fun() -> loop(Channel,Queue) end ),
     self().
 
 sendloop(N) ->
@@ -33,11 +33,11 @@ connect()  ->
     },
     {ok, Client}.
 
-loop(Channel,Queue,N) ->
+loop(Channel,Queue) ->
     amqp_channel:call(Channel, #'basic.consume'{queue = Queue,no_ack=true}),
     receive
         #'basic.consume_ok'{} ->
-            loop(Channel,Queue,N);
+            loop(Channel,Queue);
 
         #'basic.cancel_ok'{} ->
             ok;
@@ -45,16 +45,8 @@ loop(Channel,Queue,N) ->
         {#'basic.deliver'{delivery_tag = Tag}, Content} ->
             %%io:fwrite(" [x] Received ~p~n",[Payload]),
             %%amqp_channel:cast(Channel, #'basic.ack'{delivery_tag = Tag}),
-            %%N = N + 1,
-            %%count(N),
-            loop(Channel,Queue,N)
+            loop(Channel,Queue)
     end.
-
-count(100000) ->
-    {ok,M_Time} = current_time_millis(),
-    io:fwrite(" [x] time:~p~n",[M_Time]);
-count(N) ->
-    ok.
 
 current_time_millis() ->
     {M,S,MS} = erlang:now(),
