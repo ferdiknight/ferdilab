@@ -26,6 +26,8 @@ public class SkipListMap<K, V> extends AbstractMap<K, V>
         implements Map<K, V>, Cloneable, Serializable
 {
 
+    public static long start = 0,stop = 0,randomCost = 0,compareCost = 0,findPreCost = 0,indexCost = 0,scanCost = 0,usingFindNode = 0;
+    
     private static final long serialVersionUID = -8627078645895051610L;
     /**
      * Generates the initial random seed for the cheaper per-instance random
@@ -186,6 +188,7 @@ public class SkipListMap<K, V> extends AbstractMap<K, V>
      */
     private Comparable<? super K> comparable(Object key) throws ClassCastException
     {
+        
         if (key == null)
         {
             throw new NullPointerException();
@@ -197,7 +200,8 @@ public class SkipListMap<K, V> extends AbstractMap<K, V>
         else
         {
             return (Comparable<? super K>) key;
-        }
+        }     
+        
     }
 
     /**
@@ -392,6 +396,9 @@ public class SkipListMap<K, V> extends AbstractMap<K, V>
         Node<K, V> n;
         K k;
         int c;
+        
+        start = System.currentTimeMillis();
+        
         for (;;)
         {
             Index<K, V> d;
@@ -426,7 +433,13 @@ public class SkipListMap<K, V> extends AbstractMap<K, V>
                 break;
             }
         }
-
+        
+        stop = System.currentTimeMillis();
+        
+        indexCost += (stop - start);
+        
+        start = System.currentTimeMillis();
+        
         // Traverse nexts
         for (n = q.node.next; n != null; n = n.next)
         {
@@ -443,6 +456,11 @@ public class SkipListMap<K, V> extends AbstractMap<K, V>
                 }
             }
         }
+        
+        stop = System.currentTimeMillis();
+        
+        scanCost += (stop - start);
+        
         return null;
     }
 
@@ -487,10 +505,24 @@ public class SkipListMap<K, V> extends AbstractMap<K, V>
      */
     private V doPut(K kkey, V value, boolean onlyIfAbsent)
     {
+        start = System.currentTimeMillis();
+        
         Comparable<? super K> key = comparable(kkey);
+        
+        stop = System.currentTimeMillis();
+        
+        compareCost += (stop - start);
+        
         for (;;)
         {
+            start = System.currentTimeMillis();
+            
             Node<K, V> b = findPredecessor(key);
+            
+            stop = System.currentTimeMillis();
+            
+            findPreCost += (stop - start);
+            
             Node<K, V> n = b.next;
             for (;;)
             {
@@ -522,7 +554,12 @@ public class SkipListMap<K, V> extends AbstractMap<K, V>
 
                 Node<K, V> z = new Node<K, V>(kkey, value, n);
                 b.next = z;
+                
+                start = System.currentTimeMillis();
                 int level = randomLevel();
+                stop = System.currentTimeMillis();
+                randomCost += (stop - start);
+                
                 if (level > 0)
                 {
                     insertIndex(z, level);

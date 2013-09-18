@@ -5,6 +5,7 @@
 package com.blueferdi.diamondbox.datastruct;
 
 import com.blueferdi.diamondbox.util.SkipListMap;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -22,100 +23,111 @@ public class HashMapvSkipList
         Random r = new Random();
         int capacity = 10000000;
         
+        Comparator<Integer> intComparator = new Comparator<Integer>() {
+
+            public int compare(Integer o1, Integer o2)
+            {
+                return o1.intValue() - o2.intValue();
+            }
+        };
+        
         HashMap<Integer,String> hashMap = new HashMap<Integer,String>();
         
-        SkipListMap<Integer,String> skipListMap = new SkipListMap<Integer,String>();
+        SkipListMap<Integer,String> skipListMap = new SkipListMap<Integer,String>(intComparator);
         
         ConcurrentSkipListMap<Integer,String> casSkipListMap = new ConcurrentSkipListMap<Integer,String>();
         long start = 0,stop = 0;
         
-        start = System.currentTimeMillis();
-        
-        for(int i=0;i<capacity;i++)
-        {
-            hashMap.put(i, Integer.toString(i));
-        }
-        
-        stop = System.currentTimeMillis();
-        
-        System.out.println(stop - start);
-        
-        start = System.currentTimeMillis();
-        for(int i=0;i<capacity;i++)
-        {
-            hashMap.get(r.nextInt(capacity));
-        }
-        stop = System.currentTimeMillis();
-        System.out.println(stop - start);
-        
-        hashMap.clear();
-        
-        System.gc();
-        
-        start = System.currentTimeMillis();
-        
-        for(int i=0;i<capacity;i++)
-        {
-            hashMap.put(i, Integer.toString(i));
-        }
-        
-        stop = System.currentTimeMillis();
-        
-        System.out.println(stop - start);
-        
-        start = System.currentTimeMillis();
-        for(int i=0;i<capacity;i++)
-        {
-            hashMap.get(r.nextInt(capacity));
-        }
-        stop = System.currentTimeMillis();
-        System.out.println(stop - start);
-        
-        hashMap.clear();
-        
-        System.gc();
-        
 //        start = System.currentTimeMillis();
+//        
 //        for(int i=0;i<capacity;i++)
 //        {
-//            skipListMap.put(i, Integer.toString(i));
+//            hashMap.put(i, Integer.toString(i));
 //        }
 //        
 //        stop = System.currentTimeMillis();
+//        
 //        System.out.println(stop - start);
 //        
 //        start = System.currentTimeMillis();
 //        for(int i=0;i<capacity;i++)
 //        {
-//            skipListMap.get(r.nextInt(capacity));
+//            hashMap.get(r.nextInt(capacity));
 //        }
 //        stop = System.currentTimeMillis();
 //        System.out.println(stop - start);
 //        
-//        skipListMap.clear();
+//        hashMap.clear();
 //        
 //        System.gc();
 //        
 //        start = System.currentTimeMillis();
+//        
 //        for(int i=0;i<capacity;i++)
 //        {
-//            skipListMap.put(i, Integer.toString(i));
+//            hashMap.put(i, Integer.toString(i));
 //        }
 //        
 //        stop = System.currentTimeMillis();
+//        
 //        System.out.println(stop - start);
 //        
 //        start = System.currentTimeMillis();
 //        for(int i=0;i<capacity;i++)
 //        {
-//            skipListMap.get(r.nextInt(capacity));
+//            hashMap.get(r.nextInt(capacity));
 //        }
 //        stop = System.currentTimeMillis();
 //        System.out.println(stop - start);
 //        
-//        skipListMap.clear();
+//        hashMap.clear();
 //        
 //        System.gc();
+        
+        start = System.currentTimeMillis();
+        for(int i=0;i<capacity;i++)
+        {
+            skipListMap.put(i, Integer.toString(i));
+        }
+        
+        stop = System.currentTimeMillis();
+        System.out.println(stop - start);
+        
+        start = System.currentTimeMillis();
+        for(int i=0;i<capacity;i++)
+        {
+            skipListMap.get(r.nextInt(capacity));
+        }
+        stop = System.currentTimeMillis();
+        System.out.println(stop - start);
+        
+        skipListMap.clear();
+        
+        System.gc();
+        
+        start = System.currentTimeMillis();
+        for(int i=0;i<capacity;i++)
+        {
+            skipListMap.put(i, Integer.toString(i));
+        }
+        
+        stop = System.currentTimeMillis();
+        System.out.println(stop - start);
+        
+        start = System.currentTimeMillis();
+        for(int i=0;i<capacity;i++)
+        {
+            skipListMap.get(r.nextInt(capacity));
+        }
+        stop = System.currentTimeMillis();
+        System.out.println(stop - start);
+        
+        skipListMap.clear();
+        
+        System.out.println(skipListMap.compareCost + " " + skipListMap.randomCost + " " + skipListMap.indexCost + " " + skipListMap.scanCost);
+        
+        
+        System.gc();
         
         
         
