@@ -71,7 +71,10 @@ public class Arrangement {
     }
     
     public static void main(String[] args) {
-        Arrangement a = new Arrangement();
-        a.arrangeAllInOne(new String[]{"a","b","c","d","e"}, 0, 4);
+//        Arrangement a = new Arrangement();
+//        a.arrangeAllInOne(new String[]{"a","b","c","d","e"}, 0, 4);
+        
+        System.out.println(80<100?90:100.0);
+        
     }
 }

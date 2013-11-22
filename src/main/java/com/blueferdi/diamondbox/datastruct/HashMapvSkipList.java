@@ -7,6 +7,7 @@ package com.blueferdi.diamondbox.datastruct;
 import com.blueferdi.diamondbox.util.SkipListMap;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -20,6 +21,7 @@ public class HashMapvSkipList
 {
     public static void main(String[] args)    
     {
+        
         Random r = new Random();
         int capacity = 10000000;
         
